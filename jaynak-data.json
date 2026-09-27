@@ -1,0 +1,172 @@
+{
+ "customers": [
+  {
+   "id": "8643f143b9498c0d6198c37e",
+   "phone": "96898169943",
+   "name": "زبون 9943",
+   "walletBalance": 0.0,
+   "points": 0,
+   "lifetimePoints": 0,
+   "isBlocked": false,
+   "createdAt": 1789583485.5219204
+  },
+  {
+   "id": "85bea4cb188d9a9a23b12ef8",
+   "phone": "96872195613",
+   "name": "زبون 5613",
+   "walletBalance": 0.0,
+   "points": 0,
+   "lifetimePoints": 0,
+   "isBlocked": false,
+   "createdAt": 1790507522.6482012
+  }
+ ],
+ "drivers": [
+  {
+   "id": "c5ad228b97d00f0781d129e6",
+   "phone": "96872195613",
+   "name": "خنخ",
+   "zone": "مسقط",
+   "lat": 23.59,
+   "lon": 58.4,
+   "presence": "offline",
+   "approval": "pending",
+   "earningsBalance": 0.0,
+   "completedOrders": 0,
+   "ratingSum": 0,
+   "ratingCount": 0,
+   "acceptRadiusKm": 3.0,
+   "declined": [],
+   "docs": {
+    "civilID": "19981013",
+    "licenseNumber": "46464",
+    "assets": [
+     {
+      "kind": "civilIDFront",
+      "fileID": "sGGKRWgcqEkliqX0ROHjiM1Co8N5yOOT"
+     },
+     {
+      "kind": "civilIDBack",
+      "fileID": "a8M6JEVc2UqNHXMZzKAr_NcvD35Kp2KB"
+     },
+     {
+      "kind": "license",
+      "fileID": "tVf4cXlkKwhWwW1Hht94bIk7nU8PivkB"
+     },
+     {
+      "kind": "ownership",
+      "fileID": "D_JckjMTkJi6Y5xbZDmLM0GBZGggGXv-"
+     },
+     {
+      "kind": "vehicle",
+      "fileID": "ot_fyKNqPf-_34oFPjKI69QVblD90KNb"
+     }
+    ]
+   },
+   "createdAt": 1790507240.519177,
+   "vehicle": {
+    "make": "6464",
+    "model": "646464",
+    "year": "",
+    "plateNumber": "46464",
+    "color": "",
+    "ownershipNumber": "46546"
+   },
+   "rejectionNote": null
+  }
+ ],
+ "orders": [
+  {
+   "id": "72d947a52354c4e988978153",
+   "ref": "JN-WKFVD",
+   "customerID": "85bea4cb188d9a9a23b12ef8",
+   "customerPhone": "96872195613",
+   "driverID": null,
+   "kind": "errand",
+   "status": "searching",
+   "pickup": {
+    "lat": 23.6178,
+    "lon": 58.5636,
+    "zone": "مطرح",
+    "name": "سوق مطرح"
+   },
+   "dropoff": {
+    "lat": 23.5866,
+    "lon": 58.3411,
+    "zone": "السيب",
+    "name": "سيتي سنتر مسقط"
+   },
+   "price": {
+    "km": 22.9,
+    "minutes": 62,
+    "base": 0.8,
+    "distance": 2.748,
+    "time": 0.93,
+    "zoneSurcharge": 0.1,
+    "kindAdjustment": 0.0,
+    "surge": 0.0,
+    "discount": 0.0,
+    "voucherTitle": null,
+    "total": 4.578,
+    "commission": 0.16,
+    "driverPayout": 4.418,
+    "isPeak": false
+   },
+   "payment": "cash",
+   "dispatchMode": "nearby",
+   "note": "",
+   "recipientPhone": "",
+   "declinedBy": [],
+   "createdAt": 1790507522.6482263,
+   "offeredTo": []
+  },
+  {
+   "id": "5caa8f389c1202868f0843e5",
+   "ref": "JN-2LCCP",
+   "customerID": "8643f143b9498c0d6198c37e",
+   "customerPhone": "96898169943",
+   "driverID": null,
+   "kind": "errand",
+   "status": "searching",
+   "pickup": {
+    "lat": 23.6178,
+    "lon": 58.5636,
+    "zone": "مطرح",
+    "name": "سوق مطرح"
+   },
+   "dropoff": {
+    "lat": 23.5866,
+    "lon": 58.3411,
+    "zone": "السيب",
+    "name": "سيتي سنتر مسقط"
+   },
+   "price": {
+    "km": 22.9,
+    "minutes": 62,
+    "base": 0.8,
+    "distance": 2.748,
+    "time": 0.93,
+    "zoneSurcharge": 0.1,
+    "kindAdjustment": 0.0,
+    "surge": 0.0,
+    "discount": 0.0,
+    "voucherTitle": null,
+    "total": 4.578,
+    "commission": 0.16,
+    "driverPayout": 4.418,
+    "isPeak": false
+   },
+   "payment": "cash",
+   "dispatchMode": "nearby",
+   "note": "",
+   "recipientPhone": "",
+   "declinedBy": [],
+   "createdAt": 1789583485.521938,
+   "offeredTo": []
+  }
+ ],
+ "transactions": [],
+ "vouchers": [],
+ "admins": [],
+ "rewards": []
+}

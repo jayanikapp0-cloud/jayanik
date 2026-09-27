@@ -1,0 +1,13 @@
+version: '3.8'
+
+services:
+  jaynak:
+    build: .
+    container_name: jaynak-server
+    restart: always
+    ports:
+      - "8787:8787"
+    volumes:
+      - ./data:/app/data
+    env_file:
+      - .env

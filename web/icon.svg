@@ -1,0 +1,10 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="512" height="512" viewBox="0 0 512 512">
+  <rect width="512" height="512" fill="#0B0E11"/>
+  <g transform="translate(256 246)">
+    <path d="M0-104c-52 0-94 42-94 94 0 62 94 148 94 148s94-86 94-148c0-52-42-94-94-94z"
+          fill="#17C08A"/>
+    <text x="0" y="18" text-anchor="middle" fill="#04140E"
+          font-family="-apple-system, system-ui, sans-serif"
+          font-size="104" font-weight="700">ج</text>
+  </g>
+</svg>

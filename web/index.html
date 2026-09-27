@@ -1,0 +1,359 @@
+<!doctype html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#0B0E11">
+<title>جاينك — اطلب مندوب</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+Arabic:wght@400;500;600;700&family=IBM+Plex+Mono:wght@500&display=swap">
+<link rel="manifest" href="/web/manifest.webmanifest">
+<link rel="apple-touch-icon" href="/web/icon-192.png">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-title" content="جاينك">
+<link rel="stylesheet" href="/web/app.css">
+</head>
+<body>
+
+<div id="app" class="app">
+
+
+  <header class="bar">
+    <div class="brand">
+      <span class="pin"><b>ج</b></span>
+      <span class="brand__name">جاينك</span>
+    </div>
+    <button id="account-btn" class="ghost" type="button">
+      <span id="account-label">دخول</span>
+    </button>
+  </header>
+
+
+  <main id="view-order" class="view">
+
+    <section class="card">
+      <h1 class="h1">وين نوصّل لك اليوم؟</h1>
+
+      <div class="kinds" id="kinds" role="radiogroup" aria-label="نوع الطلب"></div>
+
+      <div class="route">
+        <button id="pickup-btn" class="loc" type="button" data-pt="pickup">
+          <span class="loc__dot loc__dot--from" aria-hidden="true"></span>
+          <span class="loc__txt">
+            <span class="loc__cap">نقطة الاستلام</span>
+            <b id="pickup-name">اختر على الخريطة</b>
+            <small id="pickup-sub"></small>
+          </span>
+          <span class="loc__act" aria-hidden="true">الخريطة</span>
+        </button>
+
+        <button id="swap" class="route__swap" type="button"
+                aria-label="بدّل نقطة الاستلام والتسليم" title="بدّل النقطتين">⇅</button>
+
+        <button id="dropoff-btn" class="loc" type="button" data-pt="dropoff">
+          <span class="loc__dot loc__dot--to" aria-hidden="true"></span>
+          <span class="loc__txt">
+            <span class="loc__cap">نقطة التسليم</span>
+            <b id="dropoff-name">اختر على الخريطة</b>
+            <small id="dropoff-sub"></small>
+          </span>
+          <span class="loc__act" aria-hidden="true">الخريطة</span>
+        </button>
+      </div>
+
+      <label class="field">
+        <span class="field__label">ملاحظة <span class="opt">اختياري</span></span>
+        <input id="note" class="input" maxlength="280"
+               placeholder="رقم المبنى، اسم المستلم، تفاصيل الطلب…">
+      </label>
+
+      <div class="pay" role="radiogroup" aria-label="طريقة الدفع">
+        <button type="button" class="pay__opt is-on" data-pay="cash">نقداً عند التسليم</button>
+        <button type="button" class="pay__opt" data-pay="wallet">من المحفظة</button>
+      </div>
+
+      <div class="field">
+        <span class="field__label">كيف يوصل الطلب؟</span>
+        <div class="pay" role="radiogroup" aria-label="نظام التوزيع">
+          <button type="button" class="pay__opt is-on" data-dispatch="nearby">أقرب المندوبين</button>
+          <button type="button" class="pay__opt" data-dispatch="open">معروض للجميع</button>
+        </div>
+        <span id="dispatch-hint" class="fine" style="text-align:start">يوصل لأقرب ٣ مندوبين في نطاق ٣ كم، وأول من يقبل يثبت عليه.</span>
+      </div>
+    </section>
+
+
+    <section class="card quote" id="quote" aria-live="polite">
+      <div class="quote__head">
+        <span class="quote__label">السعر التقديري</span>
+        <span id="quote-total" class="quote__total">—</span>
+      </div>
+      <div id="quote-meta" class="quote__meta">اختر النقطتين ليُحسب السعر</div>
+      <details id="quote-details" class="quote__details" hidden>
+        <summary>تفصيل السعر</summary>
+        <dl id="quote-rows" class="rows"></dl>
+      </details>
+    </section>
+
+    <div id="order-error" class="alert" hidden></div>
+
+    <button id="submit" class="cta" type="button" disabled>اطلب مندوب الآن</button>
+    <p class="fine">السعر يُحسب على الخادم بالمسافة والوقت والولاية. لا رسوم مخفيّة.</p>
+  </main>
+
+
+  <main id="view-orders" class="view" hidden>
+    <h1 class="h1">طلباتي</h1>
+    <div id="orders-list" class="stack"></div>
+  </main>
+
+
+  <main id="view-driver" class="view" hidden>
+    <section class="card" id="driver-head">
+      <div class="drv__top">
+        <div>
+          <h1 class="h1">لوحة المندوب</h1>
+          <div id="drv-status" class="quote__meta">—</div>
+        </div>
+        <button id="drv-toggle" class="ghost" type="button">—</button>
+      </div>
+      <div class="drv__stats">
+        <div class="stat"><span class="stat__k">الرصيد</span><b id="drv-balance" class="stat__v">—</b></div>
+        <div class="stat"><span class="stat__k">توصيلات</span><b id="drv-done" class="stat__v">—</b></div>
+      </div>
+      <div id="drv-warn" class="alert" hidden></div>
+    </section>
+
+    <section class="card" id="drv-tier-card">
+      <div class="tier">
+        <div class="tier__text">
+          <div class="tier__title" id="drv-tier">—</div>
+          <div class="tier__sub" id="drv-tier-sub">—</div>
+        </div>
+        <div class="tier__badge" id="drv-tier-badge">—</div>
+      </div>
+    </section>
+
+    <section class="card">
+      <div class="drv__top">
+        <div>
+          <h2 class="sec" style="margin:0">وضع الوجهة</h2>
+          <div class="quote__meta" id="drv-dest-state">بلا وجهة — تستلم ما حولك فقط</div>
+        </div>
+      </div>
+      <select id="drv-dest" class="select"></select>
+      <div class="pair">
+        <label class="field"><span class="field__label">نطاق الاستقبال (كم)</span>
+          <input id="drv-radius" class="input" inputmode="decimal" dir="ltr"></label>
+        <button id="drv-dest-clear" class="ghost" type="button" style="align-self:end;min-block-size:50px">إلغاء الوجهة</button>
+      </div>
+      <p class="fine" style="text-align:start">حين تضبط وجهتك تستلم ما يقع على مسارك، لا ما حولك فقط — فلا تعود فارغاً.</p>
+    </section>
+
+    <section id="drv-board-wrap" hidden>
+      <h2 class="sec">اللوحة المفتوحة</h2>
+      <div id="drv-board" class="stack"></div>
+    </section>
+
+    <section id="drv-active-wrap" hidden>
+      <h2 class="sec">الطلب الجاري</h2>
+      <div id="drv-active" class="stack"></div>
+    </section>
+
+    <section>
+      <h2 class="sec">طلبات متاحة</h2>
+      <div id="drv-offers" class="stack"></div>
+    </section>
+  </main>
+
+
+  <main id="view-wallet" class="view" hidden>
+    <section class="card">
+      <div class="drv__stats">
+        <div class="stat"><span class="stat__k">رصيد المحفظة</span><b id="w-balance" class="stat__v">—</b></div>
+        <div class="stat"><span class="stat__k">نقاطك</span><b id="w-points" class="stat__v">—</b></div>
+      </div>
+      <div id="w-level" class="quote__meta"></div>
+    </section>
+
+    <section id="w-vouchers-wrap" hidden>
+      <h2 class="sec">قسائمك</h2>
+      <div id="w-vouchers" class="stack"></div>
+    </section>
+
+    <section>
+      <h2 class="sec">استبدل نقاطك</h2>
+      <div id="w-rewards" class="stack"></div>
+    </section>
+    <p class="fine">التعبئة تجري من الإدارة بعد استلام التحويل — لا نطلب بطاقة داخل التطبيق.</p>
+  </main>
+
+
+  <main id="view-admin" class="view" hidden>
+    <h1 class="h1">لوحة الإدارة</h1>
+    <section class="card">
+      <div id="a-stats" class="a-grid"></div>
+      <div id="a-payout" class="quote__meta"></div>
+    </section>
+
+    <section>
+      <h2 class="sec">طلبات حيّة</h2>
+      <div id="a-live" class="stack"></div>
+    </section>
+
+    <section>
+      <h2 class="sec">المندوبون</h2>
+      <div id="a-drivers" class="stack"></div>
+    </section>
+
+    <section class="card">
+      <h2 class="sec" style="margin:0">قواعد التسعير</h2>
+      <div id="a-rules" class="stack"></div>
+      <div id="a-rules-msg" class="alert" hidden></div>
+    </section>
+  </main>
+
+
+  <nav class="tabs">
+    <button class="tab is-on" data-view="order" type="button">طلب</button>
+    <button class="tab" data-view="orders" type="button">طلباتي</button>
+    <button class="tab" data-view="wallet" type="button">محفظتي</button>
+    <button class="tab" data-view="driver" type="button">مندوب</button>
+    <button class="tab" data-view="admin" type="button" hidden>الإدارة</button>
+  </nav>
+</div>
+
+
+<div id="auth" class="sheet" hidden>
+  <div class="sheet__panel" role="dialog" aria-modal="true" aria-labelledby="auth-title">
+    <button id="auth-close" class="sheet__x" type="button" aria-label="إغلاق">✕</button>
+
+    <div id="auth-step-phone">
+      <h2 id="auth-title" class="h2">رقم هاتفك</h2>
+      <p class="muted">نرسل لك رمزاً للتحقّق. رقمك للتحقّق فقط.</p>
+      <div class="phone">
+        <span class="phone__cc">+968</span>
+        <input id="phone" class="phone__input" type="tel" inputmode="numeric"
+               autocomplete="tel" maxlength="11" placeholder="9xxx xxxx">
+      </div>
+      <div id="auth-error" class="alert" hidden></div>
+      <button id="send-code" class="cta" type="button">إرسال الرمز</button>
+    </div>
+
+    <div id="auth-step-code" hidden>
+      <h2 class="h2">أدخل الرمز</h2>
+      <p class="muted" id="code-sent-to"></p>
+      <div class="otp" id="otp"></div>
+      <div id="code-error" class="alert" hidden></div>
+      <div id="dev-code" class="devcode" hidden></div>
+      <button id="verify-code" class="cta" type="button">تأكيد</button>
+      <button id="resend" class="ghost wide" type="button" disabled></button>
+    </div>
+  </div>
+</div>
+
+
+<div id="track" class="sheet" hidden>
+  <div class="sheet__panel" role="dialog" aria-modal="true">
+    <button id="track-close" class="sheet__x" type="button" aria-label="إغلاق">✕</button>
+    <h2 class="h2" id="track-ref">—</h2>
+    <div id="track-steps" class="steps"></div>
+    <div id="track-body" class="stack"></div>
+  </div>
+</div>
+
+
+<div id="pick" class="sheet" hidden>
+  <div class="sheet__panel sheet__panel--pick" role="dialog" aria-modal="true"
+       aria-labelledby="pick-title">
+    <button id="pick-close" class="sheet__x" type="button" aria-label="إغلاق">✕</button>
+    <h2 class="h2" id="pick-title">نقطة الاستلام</h2>
+
+    <div class="pay" role="radiogroup" aria-label="طريقة الاختيار">
+      <button type="button" class="pay__opt is-on" data-pick="map">على الخريطة</button>
+      <button type="button" class="pay__opt" data-pick="list">من الأماكن</button>
+    </div>
+
+    <div id="pick-map-pane">
+      <div class="mapwrap">
+        <div id="pick-map" class="mapwrap__canvas"></div>
+        <div class="mapwrap__pin" aria-hidden="true"><i></i><s></s></div>
+        <button id="pick-here" class="mapwrap__here" type="button">◎ موقعي الحالي</button>
+      </div>
+      <p id="pick-hint" class="fine"></p>
+    </div>
+
+    <div id="pick-list" class="stack" hidden></div>
+
+    <div class="pick__out" aria-live="polite">
+      <b id="pick-addr">اسحب الخريطة لتحديد الموقع</b>
+      <small id="pick-coord"></small>
+    </div>
+
+    <label class="field">
+      <span class="field__label">وصف الموقع <span class="opt">اختياري — يراه المندوب</span></span>
+      <input id="pick-label" class="input" maxlength="80"
+             placeholder="رقم المبنى، الطابق، علامة قريبة…">
+    </label>
+
+    <div id="pick-error" class="alert" hidden></div>
+    <button id="pick-ok" class="cta" type="button">تثبيت هذا الموقع</button>
+  </div>
+</div>
+
+
+<div id="reg" class="sheet" hidden>
+  <div class="sheet__panel" role="dialog" aria-modal="true">
+    <button id="reg-close" class="sheet__x" type="button" aria-label="إغلاق">✕</button>
+    <h2 class="h2">سجّل كمندوب</h2>
+    <p class="muted">بياناتك للتحقّق من هويتك فقط، ولا تُعرض لأي عميل.</p>
+
+    <div class="stack">
+      <label class="field"><span class="field__label">الاسم الكامل</span>
+        <input id="reg-name" class="input" maxlength="80" placeholder="كما في البطاقة المدنية"></label>
+      <label class="field"><span class="field__label">الرقم المدني</span>
+        <input id="reg-civil" class="input" inputmode="numeric" maxlength="8" placeholder="٨ أرقام" dir="ltr"></label>
+      <label class="field"><span class="field__label">رقم رخصة القيادة</span>
+        <input id="reg-license" class="input" maxlength="30" placeholder="L-12345" dir="ltr"></label>
+      <label class="field"><span class="field__label">منطقة العمل</span>
+        <select id="reg-zone" class="select"></select></label>
+
+      <div class="pair">
+        <label class="field"><span class="field__label">نوع المركبة</span>
+          <input id="reg-make" class="input" maxlength="40" placeholder="تويوتا"></label>
+        <label class="field"><span class="field__label">الموديل</span>
+          <input id="reg-model" class="input" maxlength="40" placeholder="كورولا"></label>
+      </div>
+      <div class="pair">
+        <label class="field"><span class="field__label">رقم اللوحة</span>
+          <input id="reg-plate" class="input" maxlength="20" placeholder="12345" dir="ltr"></label>
+        <label class="field"><span class="field__label">رقم الملكية</span>
+          <input id="reg-own" class="input" maxlength="30" placeholder="OW-12345" dir="ltr"></label>
+      </div>
+
+      <h3 class="sec">المستندات</h3>
+      <div id="reg-docs" class="stack"></div>
+
+      <div id="reg-error" class="alert" hidden></div>
+      <button id="reg-submit" class="cta" type="button">إرسال للمراجعة</button>
+      <p class="fine">تُحفظ مشفّرة وتُستخدم للتحقّق فقط. لا تُعرض لأي عميل.</p>
+    </div>
+  </div>
+</div>
+
+<div id="toast" class="toast" hidden></div>
+
+<script src="/web/app.js"></script>
+<script>
+  // عامل الخدمة يشترط سياقاً آمناً: HTTPS أو localhost. على عنوان
+  // شبكة محلية (http://192.168.x.x) يرفضه المتصفّح — وهذا متوقّع
+  // لا خلل. التطبيق يعمل بلا عامل خدمة؛ هو يضيف التخبئة فقط.
+  if ('serviceWorker' in navigator && window.isSecureContext) {
+    addEventListener('load', () => {
+      navigator.serviceWorker.register('/sw.js').catch(() => {});
+    });
+  }
+</script>
+</body>
+</html>
